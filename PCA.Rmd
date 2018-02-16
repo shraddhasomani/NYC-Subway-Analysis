@@ -1,0 +1,50 @@
+---
+title: "NYC MTA Subway Data - Feature Selection (PCA)"
+author: "Shraddha Somani"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+```
+$~$
+
+### Load the data
+
+```{r}
+df_train = read.csv("C:/Users/Shraddha Somani/nyc_mta_train.csv")
+head(df_train)
+df_train_pca = df_train[c(-7,-8,-12,-13,-18)]
+head(df_train_pca)
+str(df_train_pca)
+```
+$~$
+
+### Convert entire dataset to numeric value 
+```{r}
+df_train_pca$C.A = as.factor(df_train_pca$C.A) %>% as.numeric()
+df_train_pca$UNIT = as.factor(df_train_pca$UNIT) %>% as.numeric()
+df_train_pca$SCP = as.factor(df_train_pca$SCP) %>% as.numeric()
+df_train_pca$STATION = as.factor(df_train_pca$STATION) %>% as.numeric()
+df_train_pca$LINENAME = as.factor(df_train_pca$LINENAME) %>% as.numeric()
+df_train_pca$DIVISION = as.factor(df_train_pca$DIVISION) %>% as.numeric()
+df_train_pca$DESC = as.factor(df_train_pca$DESC) %>% as.numeric()
+df_train_pca$ENTRIES = as.integer(df_train_pca$ENTRIES) %>% as.numeric()
+df_train_pca$EXITS = as.integer(df_train_pca$EXITS) %>% as.numeric()
+df_train_pca$MONTH = as.integer(df_train_pca$MONTH) %>% as.numeric()
+df_train_pca$WEEKDAY = as.factor(df_train_pca$WEEKDAY) %>% as.numeric()
+df_train_pca$HOUR = as.integer(df_train_pca$HOUR) %>% as.numeric()
+head(df_train_pca)
+```
+$~$
+
+### PCA
+```{r}
+df_pca = prcomp(df_train_pca, scale. = TRUE)
+plot(df_pca, type = "l")
+summary(df_pca)
+```
