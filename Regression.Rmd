@@ -1,0 +1,57 @@
+---
+title: "NYC MTA Subway Data - Feature Selection (Regression)"
+author: "Shraddha Somani"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(caTools)
+```
+$~$
+
+### Load the data
+```{r}
+df_train = read.csv("C:/Users/Shraddha Somani/nyc_mta_train.csv")
+head(df_train)
+df_train_pca = df_train[c(-7,-8,-11,-12,-13,-18)]
+head(df_train_pca)
+sample = sample.split(df_train_pca$ENTRIES, 2/3)
+train = df_train_pca[sample,]
+test = df_train_pca[!sample,]
+str(train)
+```
+$~$
+
+### Convert entire dataset to numeric value 
+```{r}
+train$C.A = as.factor(train$C.A) %>% as.numeric()
+train$UNIT = as.factor(train$UNIT) %>% as.numeric()
+train$SCP = as.factor(train$SCP) %>% as.numeric()
+train$STATION = as.factor(train$STATION) %>% as.numeric()
+train$LINENAME = as.factor(train$LINENAME) %>% as.numeric()
+train$DIVISION = as.factor(train$DIVISION) %>% as.numeric()
+train$DESC = as.factor(train$DESC) %>% as.numeric()
+train$ENTRIES = as.integer(train$ENTRIES) %>% as.numeric()
+train$MONTH = as.integer(train$MONTH) %>% as.numeric()
+train$WEEKDAY = as.factor(train$WEEKDAY) %>% as.numeric()
+train$HOUR = as.integer(train$HOUR) %>% as.numeric()
+head(train)
+```
+$~$
+
+### Multi Linear Regression
+```{r}
+df_fit = lm(ENTRIES ~ ., data = train)
+summary(df_fit)
+```
+$~$
+
+### Step Fit
+```{r}
+fit_step = step(df_fit)
+```
